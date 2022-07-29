@@ -13,6 +13,7 @@ import Banner from "./Banner";
 import Select from "./Select";
 import Team from "./Team";
 export default {
+  name: "Home",
   components: {
     Banner,
     Select,

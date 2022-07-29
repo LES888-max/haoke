@@ -4,6 +4,7 @@ import Home from "@/views/Home";
 import Search from "@/views/Search";
 import My from "@/views/My";
 import Consult from "@/views/Consult";
+import City from "@/views/City";
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,10 @@ const routes = [
   {
     path: "/consult",
     component: Consult,
+  },
+  {
+    path: "/city",
+    component: City,
   },
   {
     path: "*",
