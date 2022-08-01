@@ -17,73 +17,274 @@
       </div>
     </div>
     <div class="mask" @click="changeShow" v-show="show"></div>
-    <van-picker show-toolbar :columns="columns" v-show="show">
-      <template #default>
-        <div class="cancel"><p>取消</p></div>
+    <div :class="{ mask1: current == 3 }" @click="modeMask"></div>
+    <div class="mode" v-show="current == 3">
+      <div v-for="(item, index) in type" :key="index">
+        <p>{{ item }}</p>
+        <div class="select">
+          <span
+            @click="selectFn(index, id)"
+            v-for="(item, id) in typeList[index]"
+            :key="id"
+            :class="{ choose: arr[index] == id }"
+            >{{ item.label }}</span
+          >
+        </div>
+      </div>
+      <div class="btn">
+        <span class="btn1" @click="cancelBtn">取消</span>
+        <span class="btn2" @click="confirmBtn">确认</span>
+      </div>
+    </div>
+    <van-picker
+      show-toolbar
+      :columns="columns"
+      v-show="show"
+      @confirm="confirm"
+      @cancel="cancel"
+    >
+      <template #confirm>
         <div class="confirm"><p>确认</p></div>
       </template>
+      <template #cancel>
+        <div class="cancel"><p>取消</p></div>
+      </template>
     </van-picker>
+    <houses :imgList="imgList"></houses>
   </div>
 </template>
 
 <script>
-import { getCityChildApi } from "@/api";
+import Houses from "./houses";
+import { getCity } from "@/util/auth";
+import { getHouseConditionApi, getSearchHouseApi } from "@/api";
 export default {
   name: "Nav",
-
+  components: {
+    Houses,
+  },
   data() {
     return {
+      type: ["户型", "朝向", "楼层", "房屋亮点"],
       navList: ["区域", "方式", "租金", "筛选"],
       current: -1,
       show: false,
       columns: [],
       area: [],
-      money: [
-        "不限",
-        "1000及以下",
-        "1000-2000",
-        "2000-3000",
-        "3000-4000",
-        "4000-5000",
-        "5000-6000",
-        "6000-7000",
-        "7000以上",
-      ],
-      mode: ["不限", "整租", "合租"],
+      money: [],
+      mode: [],
+      typeList: [],
+      arr: [-1, -1, -1, -1],
+      imgList: [],
+      params: {},
+      modeValue: [],
+      moneyValue: [],
     };
   },
   methods: {
     chooseFn(index) {
       this.current = index;
-      this.show = true;
       if (index == 0) {
         this.columns = this.area;
+        this.show = true;
       } else if (index == 1) {
         this.columns = this.mode;
+        this.show = true;
       } else if (index == 2) {
         this.columns = this.money;
+        this.show = true;
+      } else if (index == 3) {
+        this.show = false;
       }
     },
     changeShow() {
       this.show = false;
     },
-  },
-  async created() {
-    const id = JSON.parse(localStorage.getItem("hkzf_city")).value;
-
-    const res = await getCityChildApi(id);
-    const city = JSON.parse(localStorage.getItem("hkzf_city")).label;
-    this.area.push({ text: city, children: [] });
-    res.data.body.forEach(async (item, index1) => {
-      this.area[0].children.push({ text: item.label, children: [] });
-      const child = await getCityChildApi(item.value);
-
-      child.data.body.forEach((item) => {
-        this.area[0].children[index1].children.push({
-          text: item.label,
+    loading() {
+      this.$nextTick(() => {
+        this.$toast.loading({
+          duration: 0,
+          message: "加载中...",
+          forbidClick: true,
         });
       });
-    });
+    },
+    modeMask() {
+      this.current = -1;
+      this.show = false;
+    },
+    confirm(v) {
+      if (this.current == 0) {
+        console.log(v);
+        if (v[0] == "区域") {
+          if (v[1] == "不限") {
+            this.params.area = "null";
+          } else {
+            if (v[2] == "不限") {
+              const str = v[1];
+              let area = "";
+              this.area[0].children.forEach((item) => {
+                if (item.text == str) {
+                  area = item.value;
+                  this.params.area = area;
+                }
+              });
+            } else {
+              const str = v[2];
+              const str1 = v[1];
+              let area = "";
+              this.area[0].children.forEach((item) => {
+                if (item.text == str1) {
+                  item.children.forEach((item) => {
+                    if (item.text == str) {
+                      area = item.value;
+                      this.params.area = area;
+                    }
+                  });
+                }
+              });
+            }
+          }
+        } else {
+          if (v[1] == "不限") {
+            this.params.subway = "null";
+          } else if (v[2] == "不限") {
+            const str = v[1];
+            let subway = "";
+            this.area[1].children.forEach((item) => {
+              if (item.text == str) {
+                subway = item.value;
+                this.params.subway = subway;
+              }
+            });
+          } else {
+            const str = v[2];
+            const str1 = v[1];
+            let subway = "";
+            this.area[1].children.forEach((item) => {
+              if (item.text == str1) {
+                item.children.forEach((item) => {
+                  if (item.text == str) {
+                    subway = item.value;
+                    this.params.subway = subway;
+                  }
+                });
+              }
+            });
+          }
+        }
+      } else if (this.current == 1) {
+        const rentType = this.modeValue[this.mode.indexOf(v)];
+        this.params.rentType = rentType;
+      } else if (this.current == 2) {
+        const price = this.moneyValue[this.money.indexOf(v)];
+        this.params.price = price;
+      }
+      this.current = -1;
+      this.show = false;
+      this.loading();
+      this.getHouses();
+    },
+    cancel() {
+      this.current = -1;
+      this.show = false;
+    },
+    cancelBtn() {
+      this.current = -1;
+      this.show = false;
+    },
+    confirmBtn() {
+      console.log(this.arr);
+      this.arr.forEach((item, index) => {
+        if (item == -1) {
+          if (index == 0) {
+            delete this.params.roomType;
+          } else if (index == 1) {
+            delete this.params.oriented;
+          } else if (index == 2) {
+            delete this.params.floor;
+          } else if (index == 3) {
+            delete this.params.characteristic;
+          }
+        } else {
+          if (index == 0) {
+            this.params.roomType = this.typeList[0][item].value;
+          } else if (index == 1) {
+            this.params.oriented = this.typeList[1][item].value;
+          } else if (index == 2) {
+            this.params.floor = this.typeList[2][item].value;
+          } else if (index == 3) {
+            this.params.characteristic = this.typeList[3][item].value;
+          }
+        }
+      });
+      this.current = -1;
+      this.show = false;
+      this.loading();
+      this.getHouses();
+    },
+    selectFn(a, b) {
+      if (this.arr[a] == b) {
+        this.arr.splice(a, 1, -1);
+        return;
+      }
+      this.arr.splice(a, 1, b);
+    },
+    async getHouses() {
+      try {
+        const {
+          data: {
+            body: { list },
+          },
+        } = await getSearchHouseApi(this.params);
+        this.$toast.success("加载成功！");
+        this.imgList = list;
+      } catch {
+        this.$toast.fail("加载失败！");
+      }
+    },
+    async getCondition() {
+      try {
+        const { value } = getCity();
+        const {
+          data: { body },
+        } = await getHouseConditionApi(value);
+        this.area.push(body.area);
+        this.area.push(body.subway);
+        this.area = JSON.parse(
+          JSON.stringify(this.area).replace(/label/g, "text")
+        );
+        this.area[0].children[0].children = [{ text: "" }];
+        this.area[1].children[0].children = [{ text: "" }];
+        const arr = [];
+        arr.push(...body.rentType);
+        arr.forEach((item) => {
+          this.mode.push(item.label);
+          this.modeValue.push(item.value);
+        });
+        const arr1 = [];
+        arr1.push(...body.price);
+        arr1.forEach((item) => {
+          this.money.push(item.label);
+          this.moneyValue.push(item.value);
+        });
+        this.typeList.push(
+          body.roomType,
+          body.oriented,
+          body.floor,
+          body.characteristic
+        );
+      } catch (e) {
+        console.log(e.message);
+      }
+    },
+  },
+  async created() {
+    const id = getCity();
+    this.params.cityId = id.value;
+    this.loading();
+    this.getCondition();
+    this.getHouses();
   },
 };
 </script>
@@ -91,10 +292,10 @@ export default {
 <style scoped lang="less">
 .main {
   background-color: #fff;
-  z-index: 4;
+  z-index: 3;
   .nav {
     background-color: #fff;
-    z-index: 4;
+    z-index: 3;
     position: sticky;
     width: 100%;
     display: flex;
@@ -121,19 +322,23 @@ export default {
   }
   :deep(.van-picker) {
     background-color: #fff;
-    z-index: 4;
-    position: relative;
+    z-index: 3;
+    position: sticky;
+    top: 45px;
     .van-picker__toolbar {
       position: absolute;
       width: 100%;
       bottom: -44px;
       left: 0;
+      .van-picker__cancel,
+      .van-picker__confirm {
+        width: 50%;
+        padding: 0;
+      }
       .cancel,
       .confirm {
-        background-color: #fff;
         flex: 1;
         display: block;
-        width: 50%;
         border: 1px solid #ccc;
         height: 100%;
         p {
@@ -143,8 +348,13 @@ export default {
           line-height: 42px;
         }
       }
+      .cancel {
+        background-color: #fff;
+        color: #21b97a;
+      }
       .confirm {
         background-color: #21b97a;
+        color: #fff;
       }
     }
   }
@@ -156,6 +366,77 @@ export default {
     top: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
+  }
+  .mask1 {
+    position: fixed;
+    z-index: 4;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .mode {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 75%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: #fff;
+    z-index: 5;
+    padding: 10px 10px 0;
+    padding-bottom: 60px;
+    p {
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    .select {
+      margin-left: 40px;
+      border-bottom: 1px solid #ccc;
+      span {
+        display: inline-block;
+        height: 32px;
+        width: 70px;
+        margin: 0 18px 15px 0;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        line-height: 32px;
+        text-align: center;
+        font-size: 12px;
+        color: #888;
+      }
+      .choose {
+        border: 1px solid #21b97a;
+        color: #21b97a;
+        background-color: #defaef;
+      }
+    }
+  }
+  .btn {
+    position: fixed;
+    right: 0;
+    left: 94px;
+    bottom: 0;
+    width: 281px;
+    .btn1,
+    .btn2 {
+      display: inline-block;
+      border-top: 1px solid #ccc;
+      height: 50px;
+      line-height: 50px;
+      font-size: 18px;
+      width: 50%;
+      text-align: center;
+    }
+    .btn1 {
+      color: #21b97a;
+      background-color: #fff;
+    }
+    .btn2 {
+      background-color: #21b97a;
+      color: #fff;
+    }
   }
 }
 </style>

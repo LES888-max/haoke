@@ -1,6 +1,6 @@
 import request from "@/util";
 
-export const getCitys = (level) => {
+export const getCitysApi = (level) => {
   return request({
     url: "/area/city",
     params: {
@@ -8,12 +8,12 @@ export const getCitys = (level) => {
     },
   });
 };
-export const getHotCity = () =>
+export const getHotCityApi = () =>
   request({
     url: "/area/hot",
   });
 
-export const getCity = (name) =>
+export const getCityApi = (name) =>
   request({
     url: "/area/info",
     params: {
@@ -21,7 +21,7 @@ export const getCity = (name) =>
     },
   });
 
-export const getCitySource = (id) =>
+export const getCitySourceApi = (id) =>
   request({
     url: "/area/map",
     params: {
@@ -29,10 +29,19 @@ export const getCitySource = (id) =>
     },
   });
 
-export const getCityChild = (id) =>
+export const getCityChildApi = (id) =>
   request({
     url: "/area",
     params: {
+      id,
+    },
+  });
+
+export const getCityCommunityApi = (name, id) =>
+  request({
+    url: "/area/community",
+    params: {
+      name,
       id,
     },
   });

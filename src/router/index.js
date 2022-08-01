@@ -5,6 +5,7 @@ import Search from "@/views/Search";
 import My from "@/views/My";
 import Consult from "@/views/Consult";
 import City from "@/views/City";
+import HouseDetail from "@/views/HouseDetail";
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,11 @@ const routes = [
   {
     path: "/city",
     component: City,
+  },
+  {
+    name: "detail",
+    path: "/detail/:code",
+    component: HouseDetail,
   },
   {
     path: "*",

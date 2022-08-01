@@ -9,6 +9,7 @@
 import Header from "./Header";
 import Nav from "./Nav";
 export default {
+  name: "Search",
   components: {
     Header,
     Nav,

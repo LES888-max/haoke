@@ -65,14 +65,30 @@ export default {
       localStorage.setItem("hkzf_city", JSON.stringify({ label, value }));
       this.$router.push("/home");
     },
+    loading() {
+      this.$nextTick(() => {
+        this.$toast.loading({
+          duration: 0,
+          message: "加载中...",
+          forbidClick: true,
+        });
+      });
+    },
   },
   async created() {
+    console.log("created");
     try {
+      this.loading();
       const res = await getCitysApi(1);
+      this.$toast.success("加载成功");
+      this.$toast.clear();
+
       this.list = res.data.body;
       this.deal(this.list);
     } catch (e) {
       console.log(e.message);
+    } finally {
+      this.$toast.clear();
     }
     try {
       const res = await getHotCityApi();
