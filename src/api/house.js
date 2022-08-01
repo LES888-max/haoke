@@ -1,4 +1,4 @@
-import request from "@/util";
+import request from "@/util/request";
 
 export const getHouseConditionApi = (id) =>
   request({

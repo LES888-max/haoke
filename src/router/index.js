@@ -6,7 +6,7 @@ import My from "@/views/My";
 import Consult from "@/views/Consult";
 import City from "@/views/City";
 import HouseDetail from "@/views/HouseDetail";
-import Login from "@/views/Login";
+import Register from "@/views/Register";
 
 Vue.use(VueRouter);
 
@@ -37,8 +37,8 @@ const routes = [
     component: HouseDetail,
   },
   {
-    path: "/login",
-    component: Login,
+    path: "/register",
+    component: Register,
   },
   {
     path: "*",

@@ -5,3 +5,5 @@ export const getSwiperApi = getSwiper;
 export * from "./city";
 
 export * from "./house";
+
+export * from "./user";

@@ -1,4 +1,4 @@
-import request from "@/util";
+import request from "@/util/request";
 
 export const getCitysApi = (level) => {
   return request({

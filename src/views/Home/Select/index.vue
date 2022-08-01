@@ -3,36 +3,36 @@
     <van-grid :border="false" :column-num="4">
       <van-grid-item>
         <van-image
-          width="60px"
-          height="60px"
+          width="1.6rem"
+          height="1.6rem"
           :src="require('../../../assets/imgs/1.png')"
         ></van-image>
-        <p style="margin: 12px 0">整租</p>
+        <p>整租</p>
       </van-grid-item>
 
       <van-grid-item>
         <van-image
-          width="60px"
-          height="60px"
+          width="1.6rem"
+          height="1.6rem"
           :src="require('../../../assets/imgs/2.png')"
         ></van-image>
-        <p style="margin: 12px 0">合租</p>
+        <p>合租</p>
       </van-grid-item>
       <van-grid-item>
         <van-image
-          width="60px"
-          height="60px"
+          width="1.6rem"
+          height="1.6rem"
           :src="require('../../../assets/imgs/3.png')"
         ></van-image>
-        <p style="margin: 12px 0">地图找房</p>
+        <p>地图找房</p>
       </van-grid-item>
       <van-grid-item>
         <van-image
-          width="60px"
-          height="60px"
+          width="1.6rem"
+          height="1.6rem"
           :src="require('../../../assets/imgs/4.png')"
         ></van-image>
-        <p style="margin: 12px 0">出去租</p>
+        <p>出去租</p>
       </van-grid-item>
     </van-grid>
   </div>
@@ -44,4 +44,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+:deep(.van-grid-item) {
+  p {
+    margin: 12px 0;
+    font-size: 14px;
+  }
+}
+</style>
