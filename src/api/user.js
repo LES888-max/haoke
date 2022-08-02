@@ -6,3 +6,13 @@ export const registerApi = (data) =>
     method: "POST",
     data,
   });
+
+export const getFavorateHouseApi = () =>
+  request({
+    url: "/user/favorites",
+  });
+
+export const getRantApi = () =>
+  request({
+    url: "/user/houses",
+  });

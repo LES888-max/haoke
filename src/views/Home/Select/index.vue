@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-grid :border="false" :column-num="4">
-      <van-grid-item>
+      <van-grid-item @click="goSearch(true)">
         <van-image
           width="1.6rem"
           height="1.6rem"
@@ -10,7 +10,7 @@
         <p>整租</p>
       </van-grid-item>
 
-      <van-grid-item>
+      <van-grid-item @click="goSearch(false)">
         <van-image
           width="1.6rem"
           height="1.6rem"
@@ -41,6 +41,16 @@
 <script>
 export default {
   name: "Select",
+  methods:{
+    goSearch(value){
+      this.$router.push({
+        path:'/search',
+        query:{
+          rentType:value
+        }
+      })
+    }
+  }
 };
 </script>
 

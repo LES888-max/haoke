@@ -18,7 +18,7 @@
         <div class="price">￥{{ obj.price }} <i>元/月</i></div>
       </div>
     </div>
-    <div v-if="imgList.length == 0" class="empty-container">
+    <div v-if="length == 0" class="empty-container">
       <img src="http://liufusong.top:8080/img/not-found.png" alt="" />
       <p>暂无房源</p>
     </div>
@@ -29,7 +29,9 @@
 export default {
   name: "Houses",
   data() {
-    return {};
+    return {
+      length: 1,
+    };
   },
   props: {
     imgList: {
@@ -39,7 +41,12 @@ export default {
       },
     },
   },
-  created() {},
+
+  watch: {
+    imgList(value) {
+      this.length = value.length;
+    },
+  },
   methods: {
     click(code) {
       this.$router.push({

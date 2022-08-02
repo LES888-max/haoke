@@ -42,9 +42,9 @@ export default {
       const status = res.data.status;
       if (status == 200) {
         const token = res.data.body;
-        this.$store.commit("SET_TOKEN", token);
         this.$toast.success("登陆成功！");
         this.$router.push("/my");
+        this.$store.commit("SET_TOKEN", token);
       } else {
         this.$toast.fail(res.data.description);
       }

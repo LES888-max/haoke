@@ -5,7 +5,9 @@
       v-show="
         $route.path != '/city' &&
         $route.path != '/map' &&
-        $route.path != '/register'
+        $route.path != '/register' &&
+        $route.path != '/favorate' &&
+        $route.path != '/rant'
       "
     ></Footer>
   </div>

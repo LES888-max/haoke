@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import Houses from "./houses";
+import Houses from "@/components/houses";
 import { getCity } from "@/util/auth";
 import { getHouseConditionApi, getSearchHouseApi } from "@/api";
 export default {
@@ -281,6 +281,10 @@ export default {
   },
   async created() {
     const id = getCity();
+    const renType = this.$route.query.rentType;
+    if (renType) {
+      this.params.rentType = renType;
+    }
     this.params.cityId = id.value;
     this.loading();
     this.getCondition();

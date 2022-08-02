@@ -41,6 +41,14 @@ const routes = [
     component: Register,
   },
   {
+    path: "/favorate",
+    component: () => import("@/views/Favorate"),
+  },
+  {
+    path: "/rant",
+    component: () => import("@/views/Rant"),
+  },
+  {
     path: "*",
     redirect: "/home",
   },
