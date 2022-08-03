@@ -43,7 +43,7 @@ export default {
       if (status == 200) {
         const token = res.data.body;
         this.$toast.success("登陆成功！");
-        this.$router.push("/my");
+        this.$router.replace("/home/profile");
         this.$store.commit("SET_TOKEN", token);
       } else {
         this.$toast.fail(res.data.description);

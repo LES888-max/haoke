@@ -1,52 +1,65 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "@/views/Home";
-import Search from "@/views/Search";
-import My from "@/views/My";
-import Consult from "@/views/Consult";
-import City from "@/views/City";
-import HouseDetail from "@/views/HouseDetail";
-import Register from "@/views/Register";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/home",
-    component: Home,
-  },
-  {
-    path: "/search",
-    component: Search,
-  },
-  {
-    path: "/my",
-    component: My,
-  },
-  {
-    path: "/consult",
-    component: Consult,
+    component: () => import("@/views/Layout"),
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/Home"),
+      },
+      {
+        path: "search",
+        component: () => import("@/views/Search"),
+      },
+      {
+        path: "news",
+        component: () => import("@/views/News"),
+      },
+      {
+        path: "profile",
+        component: () => import("@/views/Profile"),
+      },
+      {
+        path: "*",
+        component: () => import("@/views/Home"),
+      },
+    ],
   },
   {
     path: "/city",
-    component: City,
-  },
-  {
-    name: "detail",
-    path: "/detail/:code",
-    component: HouseDetail,
-  },
-  {
-    path: "/register",
-    component: Register,
+    component: () => import("@/views/City"),
   },
   {
     path: "/favorate",
     component: () => import("@/views/Favorate"),
   },
   {
-    path: "/rant",
-    component: () => import("@/views/Rant"),
+    path: "/rent",
+    component: () => import("@/views/Rent"),
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/MyRent"),
+      },
+      {
+        path: "add",
+        component: () => import("@/views/Add"),
+      },
+    ],
+  },
+  {
+    path: "/login",
+    component: () => import("@/views/Login"),
+  },
+  {
+    name: "detail",
+    path: "/detail/:id",
+    component: () => import("@/views/Detail"),
   },
   {
     path: "*",

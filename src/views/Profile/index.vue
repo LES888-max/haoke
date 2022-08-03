@@ -31,7 +31,7 @@
           <div>
             <div class="name">游客</div>
             <div class="register">
-              <router-link to="/register">去登陆</router-link>
+              <router-link to="/login">去登陆</router-link>
             </div>
           </div>
         </div>
@@ -110,12 +110,12 @@ export default {
     click(index) {
       const token = getToken();
       if (token == null) {
-        this.$router.push("/register");
+        this.$router.push("/login");
       }
       if (index == 0) {
         this.$router.push("/favorate");
       } else if (index == 1) {
-        this.$router.push("/rant");
+        this.$router.push("/rent");
       }
     },
   },

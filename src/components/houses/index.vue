@@ -48,11 +48,11 @@ export default {
     },
   },
   methods: {
-    click(code) {
+    click(id) {
       this.$router.push({
         name: "detail",
         params: {
-          code,
+          id,
         },
       });
     },

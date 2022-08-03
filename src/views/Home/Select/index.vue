@@ -26,7 +26,7 @@
         ></van-image>
         <p>地图找房</p>
       </van-grid-item>
-      <van-grid-item>
+      <van-grid-item @click="goOutRent">
         <van-image
           width="1.6rem"
           height="1.6rem"
@@ -41,16 +41,21 @@
 <script>
 export default {
   name: "Select",
-  methods:{
-    goSearch(value){
+  methods: {
+    goSearch(value) {
       this.$router.push({
-        path:'/search',
-        query:{
-          rentType:value
-        }
-      })
-    }
-  }
+        path: "/home/search",
+        query: {
+          rentType: value,
+        },
+      });
+    },
+    goOutRent() {
+      this.$router.push({
+        path: "/rent/add",
+      });
+    },
+  },
 };
 </script>
 
