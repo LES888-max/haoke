@@ -50,7 +50,15 @@
         <div class="cancel"><p>取消</p></div>
       </template>
     </van-picker>
-    <houses :imgList="imgList"></houses>
+    <van-list
+      offset="0"
+      @load="onLoad"
+      :finished="finished"
+      loading-text="正在加载"
+      :loading="isLoad"
+    >
+      <houses :imgList="imgList"></houses>
+    </van-list>
   </div>
 </template>
 
@@ -79,6 +87,10 @@ export default {
       params: {},
       modeValue: [],
       moneyValue: [],
+      isLoad: false,
+      finished: false,
+      start: 1,
+      end: 20,
     };
   },
   methods: {
@@ -114,6 +126,8 @@ export default {
       this.show = false;
     },
     confirm(v) {
+      this.start = 1;
+      this.end = 20;
       if (this.current == 0) {
         console.log(v);
         if (v[0] == "区域") {
@@ -183,6 +197,7 @@ export default {
       this.current = -1;
       this.show = false;
       this.loading();
+      this.imgList = [];
       this.getHouses();
     },
     cancel() {
@@ -194,7 +209,8 @@ export default {
       this.show = false;
     },
     confirmBtn() {
-      console.log(this.arr);
+      this.start = 1;
+      this.end = 20;
       this.arr.forEach((item, index) => {
         if (item == -1) {
           if (index == 0) {
@@ -221,6 +237,7 @@ export default {
       this.current = -1;
       this.show = false;
       this.loading();
+      this.imgList = [];
       this.getHouses();
     },
     selectFn(a, b) {
@@ -231,6 +248,8 @@ export default {
       this.arr.splice(a, 1, b);
     },
     async getHouses() {
+      this.params.start = this.start;
+      this.params.end = this.end;
       try {
         const {
           data: {
@@ -238,7 +257,7 @@ export default {
           },
         } = await getSearchHouseApi(this.params);
         this.$toast.success("加载成功！");
-        this.imgList = list;
+        this.imgList.push(...list);
       } catch {
         this.$toast.fail("加载失败！");
       }
@@ -277,6 +296,11 @@ export default {
       } catch (e) {
         console.log(e.message);
       }
+    },
+    onLoad() {
+      this.start = this.end;
+      this.end += 20;
+      this.getHouses();
     },
   },
   async created() {

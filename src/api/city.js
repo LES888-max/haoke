@@ -37,7 +37,7 @@ export const getCityChildApi = (id) =>
     },
   });
 
-export const getCityCommunityApi = (name, id) =>
+export const getCommunityApi = (name, id) =>
   request({
     url: "/area/community",
     params: {

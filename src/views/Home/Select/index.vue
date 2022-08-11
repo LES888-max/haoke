@@ -18,7 +18,7 @@
         ></van-image>
         <p>合租</p>
       </van-grid-item>
-      <van-grid-item>
+      <van-grid-item @click="$router.push('/map')">
         <van-image
           width="1.6rem"
           height="1.6rem"
@@ -51,9 +51,18 @@ export default {
       });
     },
     goOutRent() {
-      this.$router.push({
-        path: "/rent/add",
-      });
+      if (this.isLogin) {
+        this.$router.push({
+          path: "/rent/add",
+        });
+      } else {
+        this.$router.push("/login");
+      }
+    },
+  },
+  computed: {
+    isLogin() {
+      return !!this.$store.state.tokenObj.token;
     },
   },
 };

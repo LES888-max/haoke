@@ -18,4 +18,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped lang="less">
+body {
+  background-color: #f5f5f9;
+  font-size: 14px;
+}
+</style>

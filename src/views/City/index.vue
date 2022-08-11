@@ -76,7 +76,6 @@ export default {
     },
   },
   async created() {
-    console.log("created");
     try {
       this.loading();
       const res = await getCitysApi(1);

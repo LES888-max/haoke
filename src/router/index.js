@@ -50,6 +50,10 @@ const routes = [
         path: "add",
         component: () => import("@/views/Add"),
       },
+      {
+        path: "search",
+        component: () => import("@/views/RentSearch"),
+      },
     ],
   },
   {
@@ -60,6 +64,10 @@ const routes = [
     name: "detail",
     path: "/detail/:id",
     component: () => import("@/views/Detail"),
+  },
+  {
+    path: "/map",
+    component: () => import("@/views/Map"),
   },
   {
     path: "*",

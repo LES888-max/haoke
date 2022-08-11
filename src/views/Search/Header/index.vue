@@ -11,7 +11,7 @@
       ></span>
     </template>
     <template #action>
-      <van-icon name="location-o" />
+      <van-icon name="location-o" @click="$router.push('/map')" />
     </template>
     <template #left>
       <van-icon name="arrow-left" @click="backFn()" />

@@ -229,6 +229,7 @@ export default {
   .login {
     background: url("../../assets/imgs/avatar.png") no-repeat center;
     background-size: cover;
+    background-position: 0 0;
   }
   :deep(.van-grid-item__icon-wrapper) {
     i {
