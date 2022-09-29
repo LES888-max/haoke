@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { getCitySourceApi } from "@/api";
 import AMapLoader from "@amap/amap-jsapi-loader";
 window._AMapSecurityConfig = {
   securityJsCode: "a7655f6a95e74a7ea1d2760aac5dd0cb",
@@ -33,8 +34,13 @@ export default {
           console.log(e);
         });
     },
+    async getMapMessage() {
+      const res = await getCitySourceApi(this.$store.state.cityMessage.value);
+      console.log(res);
+    },
   },
   mounted() {
+    this.getMapMessage();
     this.initMap();
   },
 };

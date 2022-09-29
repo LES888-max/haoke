@@ -268,6 +268,7 @@ export default {
         const {
           data: { body },
         } = await getHouseConditionApi(value);
+        console.log(body);
         this.area.push(body.area);
         this.area.push(body.subway);
         this.area = JSON.parse(

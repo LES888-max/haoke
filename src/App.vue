@@ -11,7 +11,7 @@ export default {
   async beforeCreate() {
     if (!localStorage.getItem("hkzf_city")) {
       const res = await getCityApi("北京");
-      console.log(res.data.body);
+      console.log(res.data);
       localStorage.setItem("hkzf_city", JSON.stringify(res.data.body));
     }
   },
